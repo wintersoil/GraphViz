@@ -1,8 +1,49 @@
 module Main exposing (main)
 
 import Array exposing (fromList)
-import Html exposing (node, text)
-import Html.Attributes exposing (href, rel, style)
+import Browser exposing (sandbox)
+import Html exposing (Attribute, Html, button, div, node, span, text, textarea)
+import Html.Attributes exposing (href, rel, style, value)
+import Html.Events exposing (onInput)
+
+
+main =
+    Browser.sandbox
+        { init = init
+        , view = view
+        , update = update
+        }
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.batch
+        []
+
+
+type alias Model =
+    { msg1 : String
+    }
+
+
+type Msg
+    = NewItem String
+
+
+update : Msg -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+update msg model =
+    let
+        ab =
+            Tuple.first model
+    in
+    case msg of
+        NewItem item ->
+            ( { ab | msg1 = item }, Cmd.none )
+
+
+init : ( Model, Cmd Msg )
+init =
+    ( Model logic, Cmd.none )
 
 
 logic : String
@@ -10,18 +51,18 @@ logic =
     "If Price > 200 then C else if Sold < 100 then R else if Price > 500 && Sold < 20 then H else if TO && BO then KO else E"
 
 
-parseCondition : String
-parseCondition =
-    String.slice (Maybe.withDefault 0 (List.head (String.indexes "If" logic)) + 2) (Maybe.withDefault 0 (List.head (String.indexes "then" logic))) logic
+parseCondition : String -> String
+parseCondition m =
+    String.slice (Maybe.withDefault 0 (List.head (String.indexes "If" m)) + 2) (Maybe.withDefault 0 (List.head (String.indexes "then" m))) m
 
 
-parseConditionTrue : String
-parseConditionTrue =
-    if String.contains "else if" logic then
-        String.slice (Maybe.withDefault 0 (List.head (String.indexes "then" logic)) + 4) (Maybe.withDefault 0 (List.head (String.indexes "else if" logic))) logic
+parseConditionTrue : String -> String
+parseConditionTrue m =
+    if String.contains "else if" m then
+        String.slice (Maybe.withDefault 0 (List.head (String.indexes "then" m)) + 4) (Maybe.withDefault 0 (List.head (String.indexes "else if" m))) m
 
     else
-        String.slice (Maybe.withDefault 0 (List.head (String.indexes "then" logic)) + 4) (Maybe.withDefault 0 (List.head (String.indexes "else" logic))) logic
+        String.slice (Maybe.withDefault 0 (List.head (String.indexes "then" m)) + 4) (Maybe.withDefault 0 (List.head (String.indexes "else" m))) m
 
 
 parseConditionFalse : List String -> String -> Int -> List String
@@ -66,7 +107,8 @@ arrayzTrueEdgesLeft =
     [ 255, 350, 445, 540, 635, 730, 825 ]
 
 
-main =
+view : ( Model, Cmd Msg ) -> Html.Html Msg
+view model =
     Html.div [ style "display" "flex" ]
         [ Html.div []
             [ Html.div
@@ -116,7 +158,7 @@ main =
                 , style "left" "100px"
                 , style "font-family" "Montserrat"
                 ]
-                [ text parseCondition ]
+                [ text (parseCondition (Tuple.first model).msg1) ]
             , Html.div
                 [ style "border" "1px solid orange"
                 , style "margin-bottom" "40px"
@@ -129,7 +171,7 @@ main =
                 , style "top" "140px"
                 , style "font-family" "Montserrat"
                 ]
-                [ text parseConditionTrue ]
+                [ text (parseConditionTrue (Tuple.first model).msg1) ]
             , Html.div []
                 (List.indexedMap
                     (\i elm ->
@@ -163,12 +205,12 @@ main =
                                 ]
                                 [ text elm ]
                     )
-                    (parseConditionFalse [] logic 0)
+                    (parseConditionFalse [] (Tuple.first model).msg1 0)
                 )
             , Html.div []
                 (List.indexedMap
                     (\i elm ->
-                        if i < (List.length (parseConditionFalse [] logic 0) // 2) then
+                        if i < (List.length (parseConditionFalse [] (Tuple.first model).msg1 0) // 2) then
                             Html.div
                                 [ style "border" "1px solid lime"
                                 , style "margin-bottom" "40px"
@@ -192,12 +234,12 @@ main =
                         else
                             Html.div [] []
                     )
-                    (parseConditionFalse [] logic 0)
+                    (parseConditionFalse [] (Tuple.first model).msg1 0)
                 )
             , Html.div []
                 (List.indexedMap
                     (\i elm ->
-                        if i < (List.length (parseConditionFalse [] logic 0) // 2) then
+                        if i < (List.length (parseConditionFalse [] (Tuple.first model).msg1 0) // 2) then
                             Html.div
                                 [ style "border" "1px solid red"
                                 , style "margin-bottom" "40px"
@@ -221,7 +263,7 @@ main =
                         else
                             Html.div [] []
                     )
-                    (parseConditionFalse [] logic 0)
+                    (parseConditionFalse [] (Tuple.first model).msg1 0)
                 )
             , Html.div
                 [ style "font-family" "Montserrat"
@@ -229,6 +271,17 @@ main =
                 , style "margin-left" "30px"
                 ]
                 [ text logic ]
+            , Html.textarea
+                [ style "font-family" "Montserrat"
+                , style "margin-top" "10px"
+                , style "margin-left" "30px"
+                , style "position" "absolute"
+                , style "top" "40px"
+                , style "right" "40px"
+                , onInput NewItem
+                , value (Tuple.first model).msg1
+                ]
+                [ text (Tuple.first model).msg1 ]
             , node "link" [ href "https://fonts.googleapis.com/css?family=Montserrat", rel "stylesheet" ] []
             ]
         ]
