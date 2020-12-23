@@ -270,7 +270,7 @@ view model =
                 , style "margin-top" "10px"
                 , style "margin-left" "30px"
                 ]
-                [ text logic ]
+                [ text (Tuple.first model).msg1 ]
             , Html.textarea
                 [ style "font-family" "Montserrat"
                 , style "margin-top" "10px"
