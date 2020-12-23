@@ -7,7 +7,7 @@ import Html.Attributes exposing (href, rel, style)
 
 logic : String
 logic =
-    "If Price > 200 then C else if Sold < 100 then R else if Price > 500 && Sold < 20 then H else if RT && TY then BY else if TO && BO then KO else E"
+    "If Price > 200 then C else if Sold < 100 then R else if Price > 500 && Sold < 20 then H else if TO && BO then KO else E"
 
 
 parseCondition : String
