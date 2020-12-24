@@ -148,8 +148,7 @@ view model =
                 ]
                 [ text "False" ]
             , Html.div
-                [ style "border" "1px solid #009fdf"
-                , style "margin-bottom" "40px"
+                [ style "margin-bottom" "40px"
                 , style "margin-left" "40px"
                 , style "margin-top" "40px"
                 , style "border-radius" "50%"
@@ -157,6 +156,15 @@ view model =
                 , style "position" "absolute"
                 , style "left" "100px"
                 , style "font-family" "Montserrat"
+                , style "border" "1px solid rgb(177 221 239)"
+                , style "margin-bottom" "40px"
+                , style "z-index" "25"
+                , style "background-color" "#b2e3fb"
+                , style "color" "#656565"
+                , style "margin-left" "40px"
+                , style "border-radius" "30px"
+                , style "padding" "20px 30px"
+                , style "box-shadow" "3px 4px 5px #ddd"
                 ]
                 [ text (parseCondition (Tuple.first model).msg1) ]
             , Html.div
@@ -169,6 +177,10 @@ view model =
                 , style "position" "absolute"
                 , style "left" "30px"
                 , style "top" "140px"
+                , style "border" "1px solid #87f387"
+                , style "box-shadow" "3px 4px 5px #eee"
+                , style "background-color" "#c6ffc6"
+                , style "color" "#828282"
                 , style "font-family" "Montserrat"
                 ]
                 [ text (parseConditionTrue (Tuple.first model).msg1) ]
@@ -177,7 +189,10 @@ view model =
                     (\i elm ->
                         if modBy 2 i == 1 then
                             Html.div
-                                [ style "border" "1px solid orange"
+                                [ style "border" "1px solid #87f387"
+                                , style "box-shadow" "3px 4px 5px #eee"
+                                , style "background-color" "#c6ffc6"
+                                , style "color" "#828282"
                                 , style "margin-bottom" "40px"
                                 , style "margin-left" "40px"
                                 , style "justify-content" "center"
@@ -192,11 +207,15 @@ view model =
 
                         else
                             Html.div
-                                [ style "border" "1px solid #009fdf"
+                                [ style "border" "1px solid rgb(177 221 239)"
                                 , style "margin-bottom" "40px"
+                                , style "z-index" "25"
+                                , style "background-color" "#b2e3fb"
+                                , style "color" "#656565"
                                 , style "margin-left" "40px"
-                                , style "border-radius" "50%"
+                                , style "border-radius" "30px"
                                 , style "padding" "20px 30px"
+                                , style "box-shadow" "3px 4px 5px #ddd"
                                 , style "position" "absolute"
                                 , style "font-family" "Montserrat"
                                 , style "left" (String.append (String.fromInt (Maybe.withDefault 0 (Array.get i (fromList arrayzLeft)))) "px")
